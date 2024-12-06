@@ -3,7 +3,8 @@
 import { useConversation } from "@11labs/react";
 import { useCallback, useEffect, useState } from "react";
 import useSWR from "swr";
-
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 export function Call() {
   // Add state and SWR fetcher for API data
   const [isStarted, setIsStarted] = useState(false);
@@ -18,7 +19,7 @@ export function Call() {
 
   const conversation = useConversation({
     onConnect: () => console.log("Connected"),
-    onDisconnect: () => console.log("Disconnected"),
+    onDisconnect: () => setIsStarted(false),
     onMessage: (message) => console.log("Message:", message),
     onError: (error) => console.error("Error:", error),
   });
@@ -51,12 +52,17 @@ export function Call() {
   // Show loading/error states
   if (!isStarted) {
     return (
-      <button
-        onClick={() => setIsStarted(true)}
-        className="px-4 py-2 bg-blue-500 text-white rounded"
-      >
-        Start
-      </button>
+      <div className="inline-flex items-center gap-2">
+        <Button onClick={() => setIsStarted(true)}>Get Started</Button>
+        <Button variant="ghost" asChild>
+          <Link
+            href="https://github.com/youngbloodcyb/simulator"
+            target="_blank"
+          >
+            GitHub
+          </Link>
+        </Button>
+      </div>
     );
   }
 
@@ -86,6 +92,21 @@ export function Call() {
       <div className="flex flex-col items-center">
         <p>Status: {conversation.status}</p>
         <p>Agent is {conversation.isSpeaking ? "speaking" : "listening"}</p>
+
+        {/* Add audio wave animation */}
+        <div className="flex items-center gap-1 h-8 my-2">
+          {[1, 2, 3, 4].map((bar) => (
+            <div
+              key={bar}
+              className={`w-1.5 bg-blue-500 rounded-full transition-all duration-150 ${
+                conversation.isSpeaking ? "animate-sound-wave" : "h-2"
+              }`}
+              style={{
+                animationDelay: `${bar * 0.1}s`,
+              }}
+            />
+          ))}
+        </div>
       </div>
 
       <input
