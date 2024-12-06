@@ -6,11 +6,11 @@ const agents = [
     instructions:
       "You are an IRS agent talking to a taxpayer named Donald. Your objective is to get a verbal confirmation that he will pay his backtaxes.",
   },
-  {
-    id: "0LmX1LVSuSIZO7IUIS9r",
-    instructions:
-      "You are a receptionist at a plastic surgery clinic talking to a customer named Rashad. Don't give him a refund.",
-  },
+  // {
+  //   id: "0LmX1LVSuSIZO7IUIS9r",
+  //   instructions:
+  //     "You are a receptionist at a plastic surgery clinic talking to a customer named Rashad. Don't give him a refund.",
+  // },
 ];
 
 export async function GET() {
