@@ -25,11 +25,11 @@ export function Call() {
   });
 
   // Start conversation when voice data is available
-  useEffect(() => {
-    if (voiceData?.url) {
-      startConversation(voiceData.url);
-    }
-  }, [voiceData]);
+  // useEffect(() => {
+  //   if (voiceData?.url) {
+  //     startConversation(voiceData.url);
+  //   }
+  // }, [voiceData]);
 
   const startConversation = useCallback(
     async (url: string) => {
@@ -70,46 +70,59 @@ export function Call() {
   if (error) return <div>Error loading voice data</div>;
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col">
       {/* Show instructions if available */}
       {voiceData.instructions && (
         <div className="mb-4">
-          <h3>Instructions:</h3>
-          <p>{voiceData.instructions}</p>
+          <h3 className="font-bold text-lg">Instructions:</h3>
+          <p className="italic text-sm max-w-lg">{voiceData.instructions}</p>
         </div>
       )}
 
       <div className="flex gap-2">
-        <button
-          onClick={stopConversation}
-          disabled={conversation.status !== "connected"}
-          className="px-4 py-2 bg-red-500 text-white rounded disabled:bg-gray-300"
-        >
-          Stop Conversation
-        </button>
+        {conversation.status === "disconnected" ? (
+          <Button onClick={() => startConversation(voiceData.url)}>
+            I&apos;m Ready
+          </Button>
+        ) : (
+          <div className="inline-flex items-center gap-2">
+            <Button
+              onClick={stopConversation}
+              disabled={conversation.status !== "connected"}
+              variant="destructive"
+            >
+              Disconnect
+            </Button>
+            {/* Add audio wave animation */}
+            <div className="flex items-center gap-1 h-full">
+              {[1, 2, 3, 4].map((bar) => (
+                <div
+                  key={bar}
+                  className={`w-1.5 bg-black rounded-full transition-all duration-150 ${
+                    conversation.isSpeaking ? "animate-sound-wave" : "h-2"
+                  }`}
+                  style={{
+                    animationDelay: `${bar * 0.1}s`,
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-col items-center">
-        <p>Status: {conversation.status}</p>
-        <p>Agent is {conversation.isSpeaking ? "speaking" : "listening"}</p>
-
-        {/* Add audio wave animation */}
-        <div className="flex items-center gap-1 h-8 my-2">
-          {[1, 2, 3, 4].map((bar) => (
-            <div
-              key={bar}
-              className={`w-1.5 bg-blue-500 rounded-full transition-all duration-150 ${
-                conversation.isSpeaking ? "animate-sound-wave" : "h-2"
-              }`}
-              style={{
-                animationDelay: `${bar * 0.1}s`,
-              }}
-            />
-          ))}
-        </div>
+      <div className="flex flex-col mt-4">
+        <p className="text-sm font-light italic">
+          Status: {conversation.status}
+        </p>
+        {conversation.status === "connected" && (
+          <p className="text-sm font-light italic">
+            Caller is {conversation.isSpeaking ? "speaking" : "listening"}
+          </p>
+        )}
       </div>
 
-      <input
+      {/* <input
         type="range"
         min="0"
         max="1"
@@ -119,7 +132,7 @@ export function Call() {
         }
         defaultValue="1"
         className="w-48"
-      />
+      /> */}
     </div>
   );
 }
