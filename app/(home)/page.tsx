@@ -34,9 +34,27 @@ export default async function Page() {
               <span className="italic">Give it a try.</span>
             </h3>
           </div>
-          <div className="mt-4">
+          <div className="my-4">
             <Call />
           </div>
+          <p className="text-sm">
+            see our portfolios{" "}
+            <Link
+              href="https://cameron.so"
+              className="underline"
+              target="_blank"
+            >
+              cameron.so
+            </Link>{" "}
+            &{" "}
+            <Link
+              href="https://austonyoungblood.com"
+              className="underline"
+              target="_blank"
+            >
+              austonyoungblood.com
+            </Link>
+          </p>
         </Container>
       </Section>
     </Main>
