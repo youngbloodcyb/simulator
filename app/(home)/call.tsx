@@ -24,6 +24,10 @@ export function Call() {
     onError: (error) => console.error("Error:", error),
   });
 
+  // Add duration state
+  const [duration, setDuration] = useState<number>(0);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+
   // Start conversation when voice data is available
   // useEffect(() => {
   //   if (voiceData?.url) {
@@ -48,6 +52,33 @@ export function Call() {
   const stopConversation = useCallback(async () => {
     await conversation.endSession();
   }, [conversation]);
+
+  // Add effect to handle duration timer
+  useEffect(() => {
+    if (conversation.status === "connected" && !intervalId) {
+      const id = setInterval(() => {
+        setDuration((prev) => prev + 1);
+      }, 1000);
+      setIntervalId(id);
+    } else if (conversation.status !== "connected" && intervalId) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+      setDuration(0);
+    }
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [conversation.status, intervalId]);
+
+  // Add function to format duration
+  const formatDuration = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  };
 
   // Show loading/error states
   if (!isStarted) {
@@ -116,9 +147,18 @@ export function Call() {
           Status: {conversation.status}
         </p>
         {conversation.status === "connected" && (
-          <p className="text-sm font-light italic">
-            Caller is {conversation.isSpeaking ? "speaking" : "listening"}
-          </p>
+          <>
+            <p className="text-sm font-light italic">
+              Caller is {conversation.isSpeaking ? "speaking" : "listening"}
+            </p>
+            <p className="text-sm font-light italic">
+              Call duration:{" "}
+              <span className="font-mono">{formatDuration(duration)}</span>
+            </p>
+            <p className="text-xs font-light">
+              *You have 3 minutes to complete the objective.
+            </p>
+          </>
         )}
       </div>
 
