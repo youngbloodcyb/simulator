@@ -9,7 +9,11 @@ import { toast } from "sonner";
 export default function Page() {
   async function handleLogin(formData: FormData) {
     const result = await loginAccess(formData);
-    toast.error(result.error);
+    if (result.error) {
+      toast.error(result.error);
+    } else {
+      window.location.href = "/";
+    }
   }
 
   return (

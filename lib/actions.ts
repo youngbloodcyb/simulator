@@ -15,5 +15,5 @@ export async function loginAccess(formData: FormData) {
     "call_sim_login",
     Buffer.from(password as string).toString("base64")
   );
-  redirect("/");
+  return { success: true };
 }
