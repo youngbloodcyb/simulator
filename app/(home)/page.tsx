@@ -5,7 +5,7 @@ export default async function Page() {
   return (
     <Main>
       <Section>
-        <Container className="border border-gray-200 rounded-lg p-4 shadow-sm">
+        <Container className="border border-gray-200 rounded-lg p-4 shadow-sm max-w-xl">
           <div className="not-prose max-w-xl">
             <p className="text-sm mb-2">
               built by{" "}

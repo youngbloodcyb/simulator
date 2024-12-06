@@ -104,9 +104,12 @@ export function Call() {
     <div className="flex flex-col">
       {/* Show instructions if available */}
       {voiceData.instructions && (
-        <div className="mb-4">
+        <div className="mb-4 not-prose">
           <h3 className="font-bold text-lg">Instructions:</h3>
           <p className="italic text-sm max-w-lg">{voiceData.instructions}</p>
+          <p className="text-xs font-light">
+            *You have 3 minutes to complete the objective.
+          </p>
         </div>
       )}
 
@@ -154,9 +157,6 @@ export function Call() {
             <p className="text-sm font-light italic">
               Call duration:{" "}
               <span className="font-mono">{formatDuration(duration)}</span>
-            </p>
-            <p className="text-xs font-light">
-              *You have 3 minutes to complete the objective.
             </p>
           </>
         )}
